@@ -1,18 +1,18 @@
 // Configuration for your app
+const path = require('path');
 
 module.exports = function (ctx) {
   return {
     // app plugins (/src/plugins)
     plugins: [
-      'axios'
     ],
     css: [
       'app.styl'
     ],
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
-      'material-icons' // optional, you are not bound to it
-      // 'ionicons',
+      'material-icons',
+      ctx.theme.ios ? 'ionicons' : null,
       // 'mdi',
       // 'fontawesome'
     ],
@@ -30,7 +30,11 @@ module.exports = function (ctx) {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules|quasar)/
-        })
+        });
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias,
+          '@src': path.resolve(__dirname, './src'),
+        };
       }
     },
     devServer: {
@@ -62,9 +66,8 @@ module.exports = function (ctx) {
       // Quasar plugins
       plugins: [
         'Notify'
-      ]
-      // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
-      // i18n: 'de' // Quasar language
+      ],
+      iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
     },
     // animations: 'all' --- includes all animations
     animations: [
